@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>六合彩资讯（示例站）</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1>六合彩资讯（示例站）</h1>
+    <p class="tagline">仅供信息、教育与娱乐用途 - 不提供任何真实投注服务</p>
+  </header>
+
+  <main class="container">
+    <section id="about">
+      <h2>关于本站</h2>
+      <p>本网站为信息与娱乐用途，提供历史开奖记录归档、玩法与概率简介、以及一个「纯娱乐」的本地模拟器。本站不接受任何形式的投注，也不处理金钱交易。若你在澳门或其他限制区域，请先咨询当地法律。</p>
+    </section>
+
+    <section id="latest-results">
+      <h2>最近历史开奖（示例）</h2>
+      <ul class="results-list">
+        <li>2025-12-01：01, 07, 12, 18, 24, 33 — 特别号: 09</li>
+        <li>2025-11-24：02, 05, 11, 19, 28, 31 — 特别号: 14</li>
+        <li>2025-11-17：03, 08, 15, 20, 27, 34 — 特别号: 06</li>
+      </ul>
+      <p class="note">以上为示例数据。如发布真实历史开奖，请确保数据来源合法且注明来源。</p>
+    </section>
+
+    <section id="simulator">
+      <h2>纯娱乐模拟器（无真实货币）</h2>
+      <p>此模拟器仅在本地浏览器运行，用于娱乐与概率教学，不涉及真实投注或金钱。</p>
+      <div class="simulator">
+        <label>选择6个号码：</label>
+        <div id="pick-area"></div>
+        <button id="auto-pick">自动选号（示例）</button>
+        <button id="draw">模拟开奖</button>
+        <div id="sim-result"></div>
+      </div>
+    </section>
+
+    <section id="legal">
+      <h2>重要法律声明</h2>
+      <p>本站不构成或提供任何赌博服务或渠道。若你在澳门或其他禁止线上博彩的司法区，请勿用本站模拟器作为参与线上赌博的替代或助力。对法律适用性有疑问，请咨询当地律师或监管机构（例如澳门博彩监察协调局 DICJ）。</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 示例站 — 仅用于信息/娱乐用途</p>
+    <p><a href="privacy-policy.md">隐私政策（示例）</a></p>
+  </footer>
+
+  <script>
+    // 极简本地模拟器（仅用于娱乐示例，不连网、不保留记录）
+    function createPickArea() {
+      const pickArea = document.getElementById('pick-area');
+      for (let i = 1; i <= 49; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'num-btn';
+        btn.textContent = i.toString().padStart(2,'0');
+        btn.dataset.num = i;
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('selected');
+          updateSelected();
+        });
+        pickArea.appendChild(btn);
+      }
+    }
+    function updateSelected() {
+      const selected = [...document.querySelectorAll('.num-btn.selected')].map(b=>b.dataset.num);
+      // limit to 6
+      if (selected.length > 6) {
+        // unselect the earliest selected (simple behavior)
+        const first = document.querySelector('.num-btn.selected');
+        if (first) first.classList.remove('selected');
+      }
+    }
+    function autoPick() {
+      // clear
+      document.querySelectorAll('.num-btn.selected').forEach(b=>b.classList.remove('selected'));
+      const nums = [];
+      while (nums.length < 6) {
+        const n = Math.floor(Math.random()*49)+1;
+        if (!nums.includes(n)) nums.push(n);
+      }
+      nums.forEach(n=>{
+        const b = document.querySelector('.num-btn[data-num="'+n+'"]');
+        if (b) b.classList.add('selected');
+      });
+    }
+    function draw() {
+      const picked = [...document.querySelectorAll('.num-btn.selected')].map(b=>parseInt(b.dataset.num));
+      if (picked.length !== 6) {
+        alert('请先选择6个号码（或使用自动选号）。');
+        return;
+      }
+      const drawNums = [];
+      while (drawNums.length < 6) {
+        const n = Math.floor(Math.random()*49)+1;
+        if (!drawNums.includes(n)) drawNums.push(n);
+      }
+      drawNums.sort((a,b)=>a-b);
+      const special = Math.floor(Math.random()*49)+1;
+      const simResult = document.getElementById('sim-result');
+      simResult.innerHTML = '<p>开奖号码（示例）：' + drawNums.map(n=>n.toString().padStart(2,'0')).join(', ') + ' — 特别号: ' + special.toString().padStart(2,'0') + '</p>'
+        + '<p>你选：' + picked.map(n=>n.toString().padStart(2,'0')).join(', ') + '</p>';
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      createPickArea();
+      document.getElementById('auto-pick').addEventListener('click', autoPick);
+      document.getElementById('draw').addEventListener('click', draw);
+    });
+  </script>
+</body>
+</html>你好我叫小莫    我来广西
